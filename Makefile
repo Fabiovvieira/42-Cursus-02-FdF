@@ -1,33 +1,53 @@
-NAME = pushswap.a
+NAME = fdf.a
 
 NAMELIBFT = libft/libft.a
 
+NAMEMLX = minilibx/libmlx.a
+
 LIBDIR = ./include/
+
+INC=/usr/include/
+
+INCLIB=$(INC)/../lib
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I $(LIBDIR)
+CFLAGS = -Wall -Wextra -Werror -I$(LIBDIR) -I$(INC) -O3 -g
 
-SRC_C = src/fdf.c
+LFLAGS = $(NAMELIBFT) $(NAMEMLX) -L$(INCLIB) -lXext -lX11 -lm -lbsd
 
-SRC_C_BONUS = src/bonus.c
+SRCS = src/fdf.c
+
+OBJS = $(SRCS:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME):
-	make all -C ./libft
-	$(CC) -g $(CFLAGS) $(SRC_C) $(NAMELIBFT) -o push_swap
+$(NAME): $(OBJS) $(NAMELIBFT) $(NAMEMLX)
+	@$(CC) -o fdf $(OBJS) $(LFLAGS)
+	@echo "Compiled $@"
 
-bonus:
-	make all -C ./libft
-	$(CC) -g $(CFLAGS) $(SRC_C_BONUS) $(NAMELIBFT) -o checker
+$(NAMELIBFT):
+	@make all -s -C ./libft
+	@echo "Compiled $@"
+
+$(NAMEMLX):
+	@make all -s -C ./minilibx
+	@echo "Compiled $@"
+
+# bonus:
+# 	make all -C ./libft
+# 	$(CC) -g $(CFLAGS) $(SRC_C_BONUS) $(NAMELIBFT) -o checker
 
 clean:
-	make -C ./libft clean
+	@rm -rf $(OBJS)
+	@make -s -C ./libft clean
+	@make -s -C ./minilibx clean
+	@echo "Remove objects files."
 
 fclean: clean
-	make -C ./libft fclean
-	rm -rf push_swap
-	rm -rf checker
+	@make -s -C ./libft fclean
+	@make -s -C ./minilibx clean
+	@rm -rf fdf
+	@echo "Remove static libraries and executables."
 
 re: fclean all
