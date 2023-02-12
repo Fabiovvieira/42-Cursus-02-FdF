@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/05 10:05:48 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/12 11:15:05 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 {
 	int dx, dy, p, x, y;
+
+	// x0 *= img->zoom;
+	// y0 *= img->zoom;
+	// x1 *= img->zoom;
+	// y1 *= img->zoom;
+
 	dx=x1-x0;
 	dy=y1-y0;
 
@@ -54,7 +60,12 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	// }
 }
 
-void bresenham_line(t_data *img, int x1, int y1, int x2, int y2) {
+void bresenham_line(t_data *img, int x1, int y1, int x2, int y2)
+{
+	// x1 *= img->zoom;
+	// y1 *= img->zoom;
+	// x2 *= img->zoom;
+	// y2 *= img->zoom;
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);
     int x, y, p;
@@ -114,6 +125,7 @@ t_data	*init_data(void)
 	data->width_map = 0;
 	data->height_map = 0;
 	data->map = NULL;
+	data->zoom = 20;
 	return (data);
 }
 
@@ -211,6 +223,21 @@ void	parse_map(t_data *img, char *mapfile)
 	close(fd);
 }
 
+void	free_map(t_data *img)
+{
+	int		i;
+
+	i = 0;
+	if (img->map == NULL)
+		return ;
+	while (i < img->height_map)
+	{
+		free(img->map[i]);
+		i++;
+	}
+	free(img->map);
+}
+
 void	print_map(t_data *img)
 {
 	int	i;
@@ -232,6 +259,25 @@ void	print_map(t_data *img)
 	}
 }
 
+void	draw_file(t_data *img)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < img->height_map)
+	{
+		x = 0;
+		while (x < img->width_map)
+		{
+			bresenham_line(img, x, y, x + 1, y);
+			bresenham_line(img, x, y, x, y + 1);
+			x++;
+		}
+		y++;
+	}
+}
+
 void	read_map(t_data *img, char *mapfile)
 {
 	int	fd;
@@ -246,11 +292,27 @@ void	read_map(t_data *img, char *mapfile)
 	parse_map(img, mapfile);
 }
 
-int	ft_close(int keycode, t_data *vars)
+int	ft_close(t_data *vars)
 {
-	(void)keycode;
-	mlx_destroy_window(vars->mlx, vars->mlx_win);
-	return (0);
+	// free_map(vars);
+	// mlx_destroy_image(vars->mlx, vars->img);
+	if (vars)
+	{
+		mlx_destroy_image(vars->mlx, vars->img);
+		mlx_destroy_window(vars->mlx, vars->mlx_win);
+		free_map(vars);
+		free(vars);
+	}
+
+	// free(vars);
+	exit (EXIT_SUCCESS);
+}
+
+int	deal_key(int key, void *data)
+{
+	(void)data;
+	ft_printf("%d\n", key);
+	return(0);
 }
 
 int	main(int argc , char **argv)
@@ -279,14 +341,16 @@ int	main(int argc , char **argv)
 
 
 
+	// draw_a_line(img, 50, 50 , 150, 150);
 
-	bresenham_line(img, 200, 300, 300, 10);
+	// bresenham_line(img, 200, 200, 300, 300);
+	draw_file(img);
 
-	bresenham_line(img, 300, 10, 200, 300);
+	// bresenham_line(img, 300, 10, 200, 300);
 
-	bresenham_line(img, 200, 200, 300, 10);
+	// bresenham_line(img, 200, 200, 300, 10);
 
-	bresenham_line(img, 100, 100, 300, 10);
+	// bresenham_line(img, 100, 100, 300, 10);
 
 
 	// while (i < 50)
@@ -307,7 +371,11 @@ int	main(int argc , char **argv)
 	// ft_printf("bpp = %d | line_length = %d | endian = %d \n", img.bits_per_pixel, img.line_length, img.endian);
 	// mlx_hook(img->mlx_win, 2, 1L<<0, ft_close, img);
 	mlx_hook(img->mlx_win, 17, 0, ft_close, img);
+	// mlx_key_hook(img->mlx_win, deal_key, NULL);
 	mlx_loop(img->mlx);
-
+	// free_map(img);
+	// mlx_destroy_image(img->mlx, img->img);
+	// mlx_destroy_window(img->mlx, img->mlx_win);
+	// free(img);
 	//Remember to free t_data
 }
