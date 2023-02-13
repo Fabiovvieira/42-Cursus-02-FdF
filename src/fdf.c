@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/12 11:15:05 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/13 10:47:46 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,8 @@ void	parse_map(t_data *img, char *mapfile)
 		free(str);
 		i++;
 	}
+	str = get_next_line(fd);
+	free(str);
 	img->map = map;
 	close(fd);
 }
@@ -298,8 +300,10 @@ int	ft_close(t_data *vars)
 	// mlx_destroy_image(vars->mlx, vars->img);
 	if (vars)
 	{
-		mlx_destroy_image(vars->mlx, vars->img);
 		mlx_destroy_window(vars->mlx, vars->mlx_win);
+		mlx_destroy_image(vars->mlx, vars->img);
+		mlx_destroy_display(vars->mlx);
+		free(vars->mlx);
 		free_map(vars);
 		free(vars);
 	}
