@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/15 14:32:03 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:13:42 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,68 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 
 
-void	isometric(int *x, int *y, int z)
+t_iso_res	isometric(t_data *img, int x, int y, int z)
 {
-	float	x0 = (float)*x;
-	float	y0 = (float)*y;
-	// float	z0 = (float)*z;
-	// float	xres, yres;
+	float	x0;
+	float	y0;
+	float	z0;
+	// (void)z;
+	// ft_printf("x = %d | y = %d\n",x, y);
+	//scaling
+	x0 = x * img->iso.scale;
+	y0 = y * img->iso.scale;
+	z0 = z;
+	// x0 = x;
+	// y0 = y;
 
-	*x = x0 * cos(0.8) - y0 * sin(0.8);
-	*y = y0 * cos(0.8) + z + x0 * sin(0.8);
-	// *x = (int)xres;
-	// *y = (int)yres;
+	//isometric matrix
+	x = x0 * cos(0.80) - y0 * sin(0.80);
+	y = y0 * cos(0.80) + z0 + x0 * sin(0.80);
+	// x = x0 * cos(0.8) - y0 * sin(0.8);
+	// y = y0 * cos(0.8) + x0 * sin(0.8);
+
+	//rotate around z axis
+	x0 = x * cos(img->iso.rot_z) - y * sin(img->iso.rot_z);
+	y0 = x * sin(img->iso.rot_z) + y * cos(img->iso.rot_z);
+
+	// //rotate around y axis
+	x = x0 * cos(img->iso.rot_y) + z0 * sin(img->iso.rot_y);
+	z = -x0 * sin(img->iso.rot_y) + z0 * cos(img->iso.rot_y);
+	y = y0;
+
+	// //rotate around x axis
+	y0 = y * cos(img->iso.rot_x) - z * sin(img->iso.rot_x);
+	z0 = y * sin(img->iso.rot_x) + z * cos(img->iso.rot_x);
+	x0 = x;
+
+	//translate
+	x = x0 + img->iso.transl_x;
+	y = y0 + img->iso.transl_y;
+	z = z0;
+	return((t_iso_res){x, y, z});
 }
+
 
 void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 {
-	int dx, dy, p, x, y;
+	float	dx, dy, x, y;
+	int		pixels;
+	int		len;
+	t_iso_res	res, res1;
 	int z0, z1;
-	z0 = img->map[y0][x0];
-	z1 = img->map[y1][x1];
+	z0 = -img->map[y0][x0];
+	z1 = -img->map[y1][x1];
+	// (void)z1;
 
-
-
-	//zoom
-	x0 *= img->zoom;
-	y0 *= img->zoom;
-	x1 *= img->zoom;
-	y1 *= img->zoom;
-
+	// 	//isometric
+	res = isometric(img, x0, y0, z0);
+	res1 = isometric(img, x1, y1, z1);
+	x0 = res.x;
+	y0 = res.y;
+	z0 = res.z;
+	x1 = res1.x;
+	y1 = res1.y;
+	z1 = res1.z;
 
 	//color
 	if(z0)
@@ -56,45 +90,24 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	else
 		img->color = 0x0000FFFF;
 
-	//isometric
-	isometric(&x0, &y0, z0);
-	isometric(&x1, &y1, z1);
-
-	//shift
-	x0 += 200;
-	y0 += 200;
-	x1 += 200;
-	y1 += 200;
-
-	x=x0;
-	y=y0;
-	dx=x1-x0;
-	dy=y1-y0;
-	p=2*dy-dx;
-	if (x0 != x1)
+	dx = (float)x1 - (float)x0;
+	dy = (float)y1 - (float)y0;
+	pixels = sqrt((dx * dx) + (dy * dy));
+	len = pixels;
+	(void)len;
+	dx /= pixels;
+	dy /= pixels;
+	x = x0;
+	y = y0;
+	while (pixels > 0)
 	{
-		while(x < x1)
-		{
-			my_mlx_pixel_put(img, x, y, img->color);
-			x++;
-			if(p>=0)
-			{
-				y++;
-				p=p+2*dy-2*dx;
-			}
-			else
-				p=p+2*dy;
-		}
-	}
-	else
-	{
-		while(y < y1)
-		{
-			my_mlx_pixel_put(img, x, y, img->color);
-			y++;
-		}
+		my_mlx_pixel_put(img, (int)x, (int)y, img->color);
+		x += dx;
+		y += dy;
+		pixels = pixels - 1;
 	}
 }
+
 
 t_data	*init_data(void)
 {
@@ -112,7 +125,12 @@ t_data	*init_data(void)
 	data->width_map = 0;
 	data->height_map = 0;
 	data->map = NULL;
-	data->zoom = 20;
+	data->iso.scale = 20;
+	data->iso.transl_x = 200;
+	data->iso.transl_y = 200;
+	data->iso.rot_z = 0.;
+	data->iso.rot_y = 0.;
+	data->iso.rot_z = 0.;
 	data->color = 0x0000FFFF;
 	return (data);
 }
@@ -308,19 +326,65 @@ void	print_line(int x, int y, t_data *img)
 int	deal_key(int key, void *data)
 {
 	t_data	*img;
-	static int x = 100, y = 100;
+	// static int x = 100, y = 100;
 
 	img = (t_data *)data;
 	if (key == ESC)
 		ft_close(img);
+	else if (key == ZOOMIN)
+	{
+		img->iso.scale += 2;
+	}
+	else if (key == ZOOMOUT)
+	{
+		img->iso.scale -= 2;
+	}
 	else if (key == UP)
 	{
-		print_line(x, y, img);
-		// draw_a_line(img, 100, 100, 200, 200);
-		x += 10;
+		img->iso.transl_y -= 1;
+	}
+	else if (key == DOWN)
+	{
+		img->iso.transl_y += 10;
+	}
+	else if (key == LEFT)
+	{
+		img->iso.transl_x -= 10;
+	}
+	else if (key == RIGHT)
+	{
+		img->iso.transl_x += 10;
+	}
+	else if (key == ZP_ROT)
+	{
+		img->iso.rot_z += 0.1;
+	}
+	else if (key == ZM_ROT)
+	{
+		img->iso.rot_z -= 0.1;
+	}
+	else if (key == YP_ROT)
+	{
+		img->iso.rot_y += 0.1;
+	}
+	else if (key == YM_ROT)
+	{
+		img->iso.rot_y -= 0.1;
+	}
+	else if (key == XP_ROT)
+	{
+		img->iso.rot_x += 0.1;
+	}
+	else if (key == XM_ROT)
+	{
+		img->iso.rot_x -= 0.1;
 	}
 	else
 		ft_printf("key pressed = %d\n", key);
+	mlx_clear_window(img->mlx, img->mlx_win);
+	mlx_destroy_image(img->mlx, img->img);
+	img->img = mlx_new_image(img->mlx, 1920, 1080);
+	draw_file(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	return(0);
 }
@@ -368,12 +432,15 @@ int	main(int argc , char **argv)
 								&(img->endian));
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	draw_file(img);
-	// draw_a_line(img, 100, 100, 200, 100);
+	// draw_a_line(img, 100, 100, 500, 500);
+	// draw_a_line(img, 200, 200, 100, 300);
+	// mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 
+
+	// mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	// mlx_mouse_hook (img->mlx_win, read_mouse, img);
 
 	mlx_get_screen_size(img->mlx, &x, &y);
-	ft_printf("x = %d | y = %d\n", x, y);
 	mlx_hook(img->mlx_win, 17, 0, ft_close, img);
 	mlx_key_hook(img->mlx_win, deal_key, img);
 	mlx_loop(img->mlx);

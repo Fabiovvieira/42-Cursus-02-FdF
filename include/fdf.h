@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/15 14:04:17 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:00:48 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,29 @@
 # define DOWN 115 //s
 # define LEFT 97 //a
 # define RIGHT 100 //d
-# define RROT 114 //r
-# define LROT 116 //t
+# define ZP_ROT 114 //r
+# define ZM_ROT 116 //t
+# define YP_ROT 102 //f
+# define YM_ROT 103 //g
+# define XP_ROT 118 //v
+# define XM_ROT 98 //b
 # define ESC 65307 //ESC
 # define PROJECTION 65289 //TAB
+
+typedef struct	s_iso {
+	int		scale;
+	int		transl_x;
+	int		transl_y;
+	float	rot_z;
+	float	rot_y;
+	float	rot_x;
+}		t_iso;
+
+typedef struct	s_iso_res {
+	int	x;
+	int	y;
+	int	z;
+}		t_iso_res;
 
 typedef struct	s_data {
 	void	*mlx;
@@ -39,8 +58,8 @@ typedef struct	s_data {
 	int		width_map;
 	int		height_map;
 	int		**map;
-	int		zoom;
 	int		color;
+	t_iso	iso;
 }		t_data;
 
 typedef struct s_window
