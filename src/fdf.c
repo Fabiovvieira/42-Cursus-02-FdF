@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/14 18:37:14 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/15 14:32:03 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,52 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
+
+void	isometric(int *x, int *y, int z)
+{
+	float	x0 = (float)*x;
+	float	y0 = (float)*y;
+	// float	z0 = (float)*z;
+	// float	xres, yres;
+
+	*x = x0 * cos(0.8) - y0 * sin(0.8);
+	*y = y0 * cos(0.8) + z + x0 * sin(0.8);
+	// *x = (int)xres;
+	// *y = (int)yres;
+}
+
 void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 {
 	int dx, dy, p, x, y;
+	int z0, z1;
+	z0 = img->map[y0][x0];
+	z1 = img->map[y1][x1];
 
-	// x0 *= img->zoom;
-	// y0 *= img->zoom;
-	// x1 *= img->zoom;
-	// y1 *= img->zoom;
+
+
+	//zoom
+	x0 *= img->zoom;
+	y0 *= img->zoom;
+	x1 *= img->zoom;
+	y1 *= img->zoom;
+
+
+	//color
+	if(z0)
+		img->color = 0x00FF0000;
+	else
+		img->color = 0x0000FFFF;
+
+	//isometric
+	isometric(&x0, &y0, z0);
+	isometric(&x1, &y1, z1);
+
+	//shift
+	x0 += 200;
+	y0 += 200;
+	x1 += 200;
+	y1 += 200;
+
 	x=x0;
 	y=y0;
 	dx=x1-x0;
@@ -37,7 +75,7 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	{
 		while(x < x1)
 		{
-			my_mlx_pixel_put(img, x, y, 0x0000FFFF);
+			my_mlx_pixel_put(img, x, y, img->color);
 			x++;
 			if(p>=0)
 			{
@@ -52,7 +90,7 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	{
 		while(y < y1)
 		{
-			my_mlx_pixel_put(img, x, y, 0x0000FFFF);
+			my_mlx_pixel_put(img, x, y, img->color);
 			y++;
 		}
 	}
@@ -65,8 +103,8 @@ t_data	*init_data(void)
 	if (!(data = (t_data *)malloc(sizeof(t_data))))
 		return (NULL);
 	data->mlx = mlx_init();
-	data->mlx_win = mlx_new_window(data->mlx, 1000, 500, "Hello world!");
-	data->img = mlx_new_image(data->mlx, 1000, 500);
+	data->mlx_win = mlx_new_window(data->mlx, 1920, 1080, "Hello world!");
+	data->img = mlx_new_image(data->mlx, 1920, 1080);
 	data->addr = NULL;
 	data->bits_per_pixel = 0;
 	data->line_length = 0;
@@ -74,7 +112,8 @@ t_data	*init_data(void)
 	data->width_map = 0;
 	data->height_map = 0;
 	data->map = NULL;
-	data->zoom = 10;
+	data->zoom = 20;
+	data->color = 0x0000FFFF;
 	return (data);
 }
 
@@ -218,8 +257,10 @@ void	draw_file(t_data *img)
 		x = 0;
 		while (x < img->width_map)
 		{
-			draw_a_line(img, x, y, x + 1, y);
-			draw_a_line(img, x, y, x, y + 1);
+			if (x < img->width_map - 1)
+				draw_a_line(img, x, y, x + 1, y);
+			if (y < img->height_map - 1)
+				draw_a_line(img, x, y, x, y + 1);
 			x++;
 		}
 		y++;
@@ -310,6 +351,8 @@ int	main(int argc , char **argv)
 	t_data	*img;
 	// int	i = 0;
 	// int	x = 100, y=100;
+	int	x;
+	int	y;
 
 
 	img = init_data();
@@ -326,9 +369,11 @@ int	main(int argc , char **argv)
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	draw_file(img);
 	// draw_a_line(img, 100, 100, 200, 100);
-	// draw_a_line(img, 100, 100, 100, 200); //error printing vertical line. Correct this.
 
 	// mlx_mouse_hook (img->mlx_win, read_mouse, img);
+
+	mlx_get_screen_size(img->mlx, &x, &y);
+	ft_printf("x = %d | y = %d\n", x, y);
 	mlx_hook(img->mlx_win, 17, 0, ft_close, img);
 	mlx_key_hook(img->mlx_win, deal_key, img);
 	mlx_loop(img->mlx);

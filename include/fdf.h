@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/14 17:39:09 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/15 14:04:17 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,36 @@ typedef struct	s_data {
 	int		height_map;
 	int		**map;
 	int		zoom;
-}	t_data;
+	int		color;
+}		t_data;
+
+typedef struct s_window
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	int		height;
+	int		width;
+}		t_window;
+
+typedef struct s_img
+{
+	t_window	*win;
+	void		*img_ptr;
+	char		*addr;
+	int			h;
+	int			w;
+	int			bpp;
+	int			endian;
+	int			line_len;
+}		t_img;
+
+typedef struct s_fdf
+{
+	t_img	*img;
+	int		width_map;
+	int		height_map;
+	int		**map;
+	int		zoom;
+}		t_fdf;
 
 #endif
