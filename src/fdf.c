@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/15 23:13:42 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:58:59 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_iso_res	isometric(t_data *img, int x, int y, int z)
 	//scaling
 	x0 = x * img->iso.scale;
 	y0 = y * img->iso.scale;
-	z0 = z;
+	z0 = z * img->iso.scale;
 	// x0 = x;
 	// y0 = y;
 
@@ -84,6 +84,45 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	y1 = res1.y;
 	z1 = res1.z;
 
+	// color
+	if(z0)
+		img->color = 0x00FF0000;
+	else
+		img->color = 0x0000FFFF;
+
+	dx = (float)x1 - (float)x0;
+	dy = (float)y1 - (float)y0;
+	pixels = sqrt((dx * dx) + (dy * dy));
+	len = pixels;
+	(void)len;
+	dx /= pixels;
+	dy /= pixels;
+	x = x0;
+	y = y0;
+	while (pixels > 0)
+	{
+		my_mlx_pixel_put(img, (int)x, (int)y, img->color);
+		x += dx;
+		y += dy;
+		pixels = pixels - 1;
+	}
+}
+
+void	draw_a_line_2d(t_data *img, int x0, int y0, int x1, int y1)
+{
+	float	dx, dy, x, y;
+	int		pixels;
+	int		len;
+	int z0, z1;
+	z0 = -img->map[y0][x0];
+	z1 = -img->map[y1][x1];
+	(void)z1;
+	x0 = x0 * 20;
+	y0 = y0 * 20;
+	x1 = x1 * 20;
+	y1 = y1 * 20;
+
+
 	//color
 	if(z0)
 		img->color = 0x00FF0000;
@@ -108,7 +147,6 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	}
 }
 
-
 t_data	*init_data(void)
 {
 	t_data	*data;
@@ -130,7 +168,8 @@ t_data	*init_data(void)
 	data->iso.transl_y = 200;
 	data->iso.rot_z = 0.;
 	data->iso.rot_y = 0.;
-	data->iso.rot_z = 0.;
+	data->iso.rot_x = 0.;
+	data->proj = 1;
 	data->color = 0x0000FFFF;
 	return (data);
 }
@@ -264,7 +303,7 @@ void	print_map(t_data *img)
 	}
 }
 
-void	draw_file(t_data *img)
+void	draw_file_iso(t_data *img)
 {
 	int	x;
 	int	y;
@@ -279,6 +318,28 @@ void	draw_file(t_data *img)
 				draw_a_line(img, x, y, x + 1, y);
 			if (y < img->height_map - 1)
 				draw_a_line(img, x, y, x, y + 1);
+			x++;
+		}
+		y++;
+	}
+	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
+}
+
+void	draw_file_2d(t_data *img)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < img->height_map)
+	{
+		x = 0;
+		while (x < img->width_map)
+		{
+			if (x < img->width_map - 1)
+				draw_a_line_2d(img, x, y, x + 1, y);
+			if (y < img->height_map - 1)
+				draw_a_line_2d(img, x, y, x, y + 1);
 			x++;
 		}
 		y++;
@@ -379,12 +440,19 @@ int	deal_key(int key, void *data)
 	{
 		img->iso.rot_x -= 0.1;
 	}
+	else if (key == PROJECTION)
+	{
+		img->proj *= -1;
+	}
 	else
 		ft_printf("key pressed = %d\n", key);
 	mlx_clear_window(img->mlx, img->mlx_win);
 	mlx_destroy_image(img->mlx, img->img);
 	img->img = mlx_new_image(img->mlx, 1920, 1080);
-	draw_file(img);
+	if (img->proj == 1)
+		draw_file_iso(img);
+	else
+		draw_file_2d(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	return(0);
 }
@@ -431,7 +499,7 @@ int	main(int argc , char **argv)
 	img->addr = mlx_get_data_addr(img->img, &(img->bits_per_pixel), &(img->line_length),
 								&(img->endian));
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
-	draw_file(img);
+	draw_file_iso(img);
 	// draw_a_line(img, 100, 100, 500, 500);
 	// draw_a_line(img, 200, 200, 100, 300);
 	// mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);

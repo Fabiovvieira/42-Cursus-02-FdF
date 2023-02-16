@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/15 23:00:48 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:43:46 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct	s_data {
 	int		height_map;
 	int		**map;
 	int		color;
+	int		proj;
 	t_iso	iso;
 }		t_data;
 
