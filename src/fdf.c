@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/15 23:58:59 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/16 10:32:55 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,14 @@ t_iso_res	isometric(t_data *img, int x, int y, int z)
 	float	x0;
 	float	y0;
 	float	z0;
-	// (void)z;
-	// ft_printf("x = %d | y = %d\n",x, y);
 	//scaling
 	x0 = x * img->iso.scale;
 	y0 = y * img->iso.scale;
 	z0 = z * img->iso.scale;
-	// x0 = x;
-	// y0 = y;
 
 	//isometric matrix
 	x = x0 * cos(0.80) - y0 * sin(0.80);
 	y = y0 * cos(0.80) + z0 + x0 * sin(0.80);
-	// x = x0 * cos(0.8) - y0 * sin(0.8);
-	// y = y0 * cos(0.8) + x0 * sin(0.8);
 
 	//rotate around z axis
 	x0 = x * cos(img->iso.rot_z) - y * sin(img->iso.rot_z);
@@ -62,7 +56,6 @@ t_iso_res	isometric(t_data *img, int x, int y, int z)
 	return((t_iso_res){x, y, z});
 }
 
-
 void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 {
 	float	dx, dy, x, y;
@@ -72,7 +65,12 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	int z0, z1;
 	z0 = -img->map[y0][x0];
 	z1 = -img->map[y1][x1];
-	// (void)z1;
+
+	// color
+	if(z0)
+		img->color = 0x00FF0000;
+	else
+		img->color = 0x0000FFFF;
 
 	// 	//isometric
 	res = isometric(img, x0, y0, z0);
@@ -84,11 +82,7 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	y1 = res1.y;
 	z1 = res1.z;
 
-	// color
-	if(z0)
-		img->color = 0x00FF0000;
-	else
-		img->color = 0x0000FFFF;
+
 
 	dx = (float)x1 - (float)x0;
 	dy = (float)y1 - (float)y0;
@@ -402,7 +396,7 @@ int	deal_key(int key, void *data)
 	}
 	else if (key == UP)
 	{
-		img->iso.transl_y -= 1;
+		img->iso.transl_y -= 10;
 	}
 	else if (key == DOWN)
 	{
@@ -448,12 +442,14 @@ int	deal_key(int key, void *data)
 		ft_printf("key pressed = %d\n", key);
 	mlx_clear_window(img->mlx, img->mlx_win);
 	mlx_destroy_image(img->mlx, img->img);
+
 	img->img = mlx_new_image(img->mlx, 1920, 1080);
 	if (img->proj == 1)
 		draw_file_iso(img);
 	else
 		draw_file_2d(img);
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
+	mlx_string_put(img->mlx, img->mlx_win, 65, 50, 0x0000FFF00, "How to Use");
 	return(0);
 }
 
@@ -500,6 +496,7 @@ int	main(int argc , char **argv)
 								&(img->endian));
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	draw_file_iso(img);
+
 	// draw_a_line(img, 100, 100, 500, 500);
 	// draw_a_line(img, 200, 200, 100, 300);
 	// mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
@@ -508,9 +505,12 @@ int	main(int argc , char **argv)
 	// mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	// mlx_mouse_hook (img->mlx_win, read_mouse, img);
 
+	//draw menu
+	mlx_string_put(img->mlx, img->mlx_win, 65, 50, 0x0000FFF00, "How to Use");
 	mlx_get_screen_size(img->mlx, &x, &y);
 	mlx_hook(img->mlx_win, 17, 0, ft_close, img);
-	mlx_key_hook(img->mlx_win, deal_key, img);
+	mlx_hook(img->mlx_win, 2, (1L<<0), deal_key, img);
+	// mlx_key_hook(img->mlx_win, deal_key, img);
 	mlx_loop(img->mlx);
 	free(img);
 	return (0);
