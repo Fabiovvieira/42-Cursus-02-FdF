@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/15 23:43:46 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/16 11:00:36 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct	s_data {
 	void	*mlx;
 	void	*mlx_win;
 	void	*img;
+	int		width_img;
+	int		height_img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;

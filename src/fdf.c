@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/16 10:32:55 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/16 11:02:13 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,14 @@ t_iso_res	isometric(t_data *img, int x, int y, int z)
 	return((t_iso_res){x, y, z});
 }
 
+int	check_limits(t_data *img, int x, int y)
+{
+	if (x < img->width_img && x > 0 && y < img->height_img && y > 0 )
+		return (1);
+	else
+		return (0);
+}
+
 void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 {
 	float	dx, dy, x, y;
@@ -95,7 +103,8 @@ void	draw_a_line(t_data *img, int x0, int y0, int x1, int y1)
 	y = y0;
 	while (pixels > 0)
 	{
-		my_mlx_pixel_put(img, (int)x, (int)y, img->color);
+		if (check_limits(img, (int)x, (int)y))
+			my_mlx_pixel_put(img, (int)x, (int)y, img->color);
 		x += dx;
 		y += dy;
 		pixels = pixels - 1;
@@ -148,8 +157,10 @@ t_data	*init_data(void)
 	if (!(data = (t_data *)malloc(sizeof(t_data))))
 		return (NULL);
 	data->mlx = mlx_init();
-	data->mlx_win = mlx_new_window(data->mlx, 1920, 1080, "Hello world!");
-	data->img = mlx_new_image(data->mlx, 1920, 1080);
+	data->width_img = 1920;
+	data->height_img = 1080;
+	data->mlx_win = mlx_new_window(data->mlx, data->width_img, data->height_img, "Hello world!");
+	data->img = mlx_new_image(data->mlx, data->width_img, data->height_img);
 	data->addr = NULL;
 	data->bits_per_pixel = 0;
 	data->line_length = 0;
