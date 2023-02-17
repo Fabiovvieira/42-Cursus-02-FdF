@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/16 11:00:36 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/17 10:56:47 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,15 @@
 # define ESC 65307 //ESC
 # define PROJECTION 65289 //TAB
 
-typedef struct	s_iso {
+/* ---------COLOR--------- */
+# define GREEN 0x0000FFF00
+
+typedef struct s_point {
+	int	x;
+	int	y;
+}		t_point;
+
+typedef struct s_iso {
 	int		scale;
 	int		transl_x;
 	int		transl_y;
@@ -41,57 +49,28 @@ typedef struct	s_iso {
 	float	rot_x;
 }		t_iso;
 
-typedef struct	s_iso_res {
-	int	x;
-	int	y;
-	int	z;
+typedef struct s_iso_res {
+	float	x;
+	float	y;
+	float	z;
 }		t_iso_res;
 
-typedef struct	s_data {
+typedef struct s_data {
 	void	*mlx;
 	void	*mlx_win;
 	void	*img;
-	int		width_img;
-	int		height_img;
+	int		w_img;
+	int		h_img;
 	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
+	int		bpp;
+	int		line_l;
 	int		endian;
-	int		width_map;
-	int		height_map;
+	int		w_map;
+	int		h_map;
 	int		**map;
 	int		color;
 	int		proj;
 	t_iso	iso;
 }		t_data;
-
-typedef struct s_window
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-	int		height;
-	int		width;
-}		t_window;
-
-typedef struct s_img
-{
-	t_window	*win;
-	void		*img_ptr;
-	char		*addr;
-	int			h;
-	int			w;
-	int			bpp;
-	int			endian;
-	int			line_len;
-}		t_img;
-
-typedef struct s_fdf
-{
-	t_img	*img;
-	int		width_map;
-	int		height_map;
-	int		**map;
-	int		zoom;
-}		t_fdf;
 
 #endif
