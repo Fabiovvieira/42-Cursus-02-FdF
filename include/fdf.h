@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:47 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/18 14:30:35 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FDF_H
 
 # include "libft.h"
+# include "stdlib.h"
 # include "mlx.h"
 # include <math.h>
 
@@ -72,5 +73,58 @@ typedef struct s_data {
 	int		proj;
 	t_iso	iso;
 }		t_data;
+
+/*menu.c*/
+void		put_str_img(t_data *img, int x, int y, char *str);
+void		draw_menu(t_data *img);
+
+/*keys.c*/
+void		op_translate(int key, t_data *img);
+void		op_rotate(int key, t_data *img);
+void		op_scale(int key, t_data *img);
+int			check_keys(int key, t_data *img);
+int			deal_key(int key, void *data);
+
+/*init_free.c*/
+void		init_t_iso(t_data *data);
+t_data		*init_data(void);
+void		free_split(char **list);
+void		free_map(t_data *img);
+int			ft_close(t_data *vars);
+
+/*iso_eq_1.c*/
+t_iso_res	iso_projection(t_iso_res res);
+t_iso_res	isometric(t_data *img, t_iso_res res);
+
+/*iso_eq_2.c*/
+t_iso_res	rotate_z(t_data *img, t_iso_res res);
+t_iso_res	rotate_y(t_data *img, t_iso_res res);
+t_iso_res	rotate_x(t_data *img, t_iso_res res);
+t_iso_res	translate(t_data *img, t_iso_res res);
+t_iso_res	scale(t_data *img, t_iso_res res);
+
+/*draw.c*/
+void		draw_file_iso(t_data *img);
+void		draw_file_2d(t_data *img);
+void		draw_a_line_2d(t_data *img, t_point p0, t_point p1);
+void		draw_a_line(t_data *img, t_point p0, t_point p1);
+
+/*parallel.c*/
+t_iso_res	parallel(t_data *img, t_iso_res res);
+
+/*draw_utils.c*/
+void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
+int			check_limits(t_data *img, int x, int y);
+void		draw_points(t_data *img, t_iso_res res0, t_iso_res res1);
+
+/*map.c*/
+int			word_count(char	**strs);
+void		get_sizemap(t_data *img, char *mapfile);
+int			**fill_map(t_data *img, int fd, int i, int j);
+void		parse_map(t_data *img, char *mapfile);
+void		read_map(t_data *img, char *mapfile);
+
+/*fdf.c*/
+int			openfile(char *mapfile);
 
 #endif

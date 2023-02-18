@@ -16,7 +16,16 @@ CFLAGS = -Wall -Wextra -Werror -I$(LIBDIR) -I$(INC) -O3 -g
 
 LFLAGS = $(NAMELIBFT) $(NAMEMLX) -L$(INCLIB) -lXext -lX11 -lm -lbsd
 
-SRCS = src/fdf.c
+SRCS = src/fdf.c \
+		src/menu.c \
+		src/keys.c \
+		src/init_free.c \
+		src/iso_eq_1.c \
+		src/iso_eq_2.c \
+		src/draw.c \
+		src/parallel_eq.c \
+		src/draw_utils.c \
+		src/map.c \
 
 OBJS = $(SRCS:%.c=%.o)
 
@@ -33,10 +42,6 @@ $(NAMELIBFT):
 $(NAMEMLX):
 	@make all -s -C ./minilibx
 	@echo "Compiled $@"
-
-# bonus:
-# 	make all -C ./libft
-# 	$(CC) -g $(CFLAGS) $(SRC_C_BONUS) $(NAMELIBFT) -o checker
 
 clean:
 	@rm -rf $(OBJS)
