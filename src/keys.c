@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:01:03 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/18 14:02:17 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/19 18:54:09 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	op_scale(int key, t_data *img)
 	if (key == ZOOMIN)
 		img->iso.scale += 2;
 	else
-		img->iso.scale -= 2;
+		if (img->iso.scale > 2)
+			img->iso.scale -= 2;
 }
 
 int	check_keys(int key, t_data *img)

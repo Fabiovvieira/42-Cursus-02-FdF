@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:14:21 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/18 14:19:00 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/19 18:49:38 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	draw_a_line_2d(t_data *img, t_point p0, t_point p1)
 
 	z0 = img->map[p0.y][p0.x];
 	z1 = img->map[p1.y][p1.x];
-	if (z0)
+	if (z0 || z1)
 		img->color = 0x00FF0000;
 	else
 		img->color = 0x0000FFFF;
