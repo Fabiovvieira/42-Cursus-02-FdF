@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:22:56 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 15:48:41 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 21:45:05 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	check_limits(t_data *img, int x, int y)
 		return (0);
 }
 
-
 void	draw_points(t_data *img, t_iso_res res0, t_iso_res res1, t_color c)
 {
 	float	dx;
@@ -36,12 +35,11 @@ void	draw_points(t_data *img, t_iso_res res0, t_iso_res res1, t_color c)
 	float	x;
 	float	y;
 	int		pixels;
-	float	step;
 
 	dx = (float)res1.x - (float)res0.x;
 	dy = (float)res1.y - (float)res0.y;
 	pixels = sqrt((dx * dx) + (dy * dy));
-	step = (c.color1 - c.color0) / pixels;
+	c.step = (c.c1 - c.c0) / (pixels - 1);
 	dx /= pixels;
 	dy /= pixels;
 	x = res0.x;
@@ -49,10 +47,10 @@ void	draw_points(t_data *img, t_iso_res res0, t_iso_res res1, t_color c)
 	while (pixels > 0)
 	{
 		if (check_limits(img, (int)x, (int)y))
-			my_mlx_pixel_put(img, (int)x, (int)y, c.color0);
+			my_mlx_pixel_put(img, (int)x, (int)y, (int)c.c0);
 		x += dx;
 		y += dy;
-		c.color0 += step;
+		c.c0 += c.step;
 		pixels = pixels - 1;
 	}
 }

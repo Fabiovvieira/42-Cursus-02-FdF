@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:05:24 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 13:04:36 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 20:09:15 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ t_data	*init_data(void)
 	data->map = NULL;
 	init_t_iso(data);
 	data->proj = 1;
-	data->color = 0x0000FFFF;
-	data->z_max = INT_MIN;
-	data->z_min = INT_MAX;
+	data->zma = INT_MIN;
+	data->zmi = INT_MAX;
 	return (data);
 }
 

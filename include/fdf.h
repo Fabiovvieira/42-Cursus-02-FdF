@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 15:41:12 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 21:58:55 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 # define PROJECTION 65289 //TAB
 
 /* ---------COLOR--------- */
-# define GREEN 0x00FFFF00
-# define CMIN 0x00000000
-# define CMAX 0x00FFFFFF
+# define GREEN 0x0000FF00
+# define CMIN 0x000000FF
+# define CMAX 0x00FFFF00
 
 typedef struct s_point {
 	int	x;
@@ -60,8 +60,9 @@ typedef struct s_iso_res {
 }		t_iso_res;
 
 typedef struct s_color {
-	float	color0;
-	float	color1;
+	float	c0;
+	float	c1;
+	float	step;
 }		t_color;
 
 typedef struct s_data {
@@ -77,9 +78,8 @@ typedef struct s_data {
 	int		w_map;
 	int		h_map;
 	int		**map;
-	int		color;
-	int		z_max;
-	int		z_min;
+	int		zma;
+	int		zmi;
 	int		proj;
 	t_iso	iso;
 }		t_data;

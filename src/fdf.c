@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 14:31:33 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 22:00:37 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	read_map(img, argv[1]);
+	get_max_min_z(img);
 	img->addr = mlx_get_data_addr(img->img, &(img->bpp), &(img->line_l),
 			&(img->endian));
 	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);

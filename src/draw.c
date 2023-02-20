@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:14:21 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 15:48:46 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 21:58:46 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,20 @@ void	draw_a_line_2d(t_data *img, t_point p0, t_point p1)
 	int			z1;
 	t_color		c;
 
-	z0 = img->map[p0.y][p0.x];
-	z1 = img->map[p1.y][p1.x];
-	c.color0 = (((z0 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
-	c.color1 = (((z1 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
-	// if (z0 || z1)
-	// 	img->color = 0x00FF0000;
-	// else
-	// 	img->color = 0x0000FFFF;
+	z0 = (img->map)[p0.y][p0.x];
+	z1 = (img->map)[p1.y][p1.x];
+	if (img->zma != img->zmi)
+	{
+		c.c0 = (float)((float)(z0 - img->zmi) / (float)(img->zma - img->zmi));
+		c.c0 = (c.c0 * (CMAX - CMIN)) + CMIN;
+		c.c1 = (float)((float)(z1 - img->zmi) / (float)(img->zma - img->zmi));
+		c.c1 = (c.c1 * (CMAX - CMIN)) + CMIN;
+	}
+	else
+	{
+		c.c0 = CMIN;
+		c.c1 = CMIN;
+	}
 	res0 = parallel(img, (t_iso_res){p0.x, p0.y, z0});
 	res1 = parallel(img, (t_iso_res){p1.x, p1.y, z1});
 	draw_points(img, res0, res1, c);
@@ -87,12 +93,18 @@ void	draw_a_line(t_data *img, t_point p0, t_point p1)
 
 	z0 = img->map[p0.y][p0.x];
 	z1 = img->map[p1.y][p1.x];
-	c.color0 = (((z0 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
-	c.color1 = (((z1 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
-	// if (z0 || z1)
-	// 	img->color = 0x00FF0000;
-	// else
-	// 	img->color = 0x0000FFFF;
+	if (img->zma != img->zmi)
+	{
+		c.c0 = (float)((float)(z0 - img->zmi) / (float)(img->zma - img->zmi));
+		c.c0 = (c.c0 * (CMAX - CMIN)) + CMIN;
+		c.c1 = (float)((float)(z1 - img->zmi) / (float)(img->zma - img->zmi));
+		c.c1 = (c.c1 * (CMAX - CMIN)) + CMIN;
+	}
+	else
+	{
+		c.c0 = CMIN;
+		c.c1 = CMIN;
+	}
 	res0 = isometric(img, (t_iso_res){p0.x, p0.y, z0});
 	res1 = isometric(img, (t_iso_res){p1.x, p1.y, z1});
 	draw_points(img, res0, res1, c);

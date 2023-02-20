@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 12:52:35 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 15:48:54 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 20:09:13 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,12 @@ void	get_max_min_z(t_data *img)
 		i = 0;
 		while (i < img->w_map)
 		{
-			if (img->map[j][i] < img->z_min)
-				img->z_min = img->map[j][i];
-			if (img->map[j][i] > img->z_max)
-				img->z_max = img->map[j][i];
+			if (img->map[j][i] < img->zmi)
+				img->zmi = img->map[j][i];
+			if (img->map[j][i] > img->zma)
+				img->zma = img->map[j][i];
 			i++;
 		}
 		j++;
 	}
-	// ft_printf("max = %d | min = %d\n", img->z_max, img->z_min);
 }
-
-// void	get_color(t_data *img, int x)
-// {
-
-// }

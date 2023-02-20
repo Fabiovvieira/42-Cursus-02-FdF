@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:28:06 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 15:44:00 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 21:58:00 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ int	word_count(char	**strs)
 
 	count = 0;
 	while (strs[count])
+	{
+		if (strs[count][0] == '\n')
+			break ;
 		count++;
+	}
 	return (count);
 }
 
