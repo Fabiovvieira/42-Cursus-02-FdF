@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 13:23:23 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/01/28 10:37:42 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:49:05 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define SPECIFIER "cspdiuxX%"
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 1000000
 # endif
 
 typedef struct s_list

@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 10:45:55 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/18 14:30:35 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:41:12 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define FDF_H
 
 # include "libft.h"
-# include "stdlib.h"
+# include <stdlib.h>
+# include <limits.h>
 # include "mlx.h"
 # include <math.h>
 
@@ -34,7 +35,9 @@
 # define PROJECTION 65289 //TAB
 
 /* ---------COLOR--------- */
-# define GREEN 0x0000FFF00
+# define GREEN 0x00FFFF00
+# define CMIN 0x00000000
+# define CMAX 0x00FFFFFF
 
 typedef struct s_point {
 	int	x;
@@ -56,6 +59,11 @@ typedef struct s_iso_res {
 	float	z;
 }		t_iso_res;
 
+typedef struct s_color {
+	float	color0;
+	float	color1;
+}		t_color;
+
 typedef struct s_data {
 	void	*mlx;
 	void	*mlx_win;
@@ -70,6 +78,8 @@ typedef struct s_data {
 	int		h_map;
 	int		**map;
 	int		color;
+	int		z_max;
+	int		z_min;
 	int		proj;
 	t_iso	iso;
 }		t_data;
@@ -115,16 +125,20 @@ t_iso_res	parallel(t_data *img, t_iso_res res);
 /*draw_utils.c*/
 void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int			check_limits(t_data *img, int x, int y);
-void		draw_points(t_data *img, t_iso_res res0, t_iso_res res1);
+// void		draw_points(t_data *img, t_iso_res res0, t_iso_res res1);
+void		draw_points(t_data *img, t_iso_res res0, t_iso_res res1, t_color c);
 
 /*map.c*/
 int			word_count(char	**strs);
 void		get_sizemap(t_data *img, char *mapfile);
-int			**fill_map(t_data *img, int fd, int i, int j);
+void		fill_map(t_data *img, int fd, int i, int j);
 void		parse_map(t_data *img, char *mapfile);
 void		read_map(t_data *img, char *mapfile);
 
 /*fdf.c*/
 int			openfile(char *mapfile);
+
+/*color.c*/
+void		get_max_min_z(t_data *img);
 
 #endif

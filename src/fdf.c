@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/18 14:34:00 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 14:31:33 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	openfile(char *mapfile)
 {
 	int	fd;
 
-	fd = open (mapfile, O_RDONLY);
+	fd = open (mapfile, O_RDONLY, 0);
 	if (fd < 0)
 	{
 		perror("Error on opening mapfile.");

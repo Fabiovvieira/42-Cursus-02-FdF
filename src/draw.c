@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:14:21 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/19 18:49:38 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:48:46 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,19 @@ void	draw_a_line_2d(t_data *img, t_point p0, t_point p1)
 	t_iso_res	res1;
 	int			z0;
 	int			z1;
+	t_color		c;
 
 	z0 = img->map[p0.y][p0.x];
 	z1 = img->map[p1.y][p1.x];
-	if (z0 || z1)
-		img->color = 0x00FF0000;
-	else
-		img->color = 0x0000FFFF;
+	c.color0 = (((z0 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
+	c.color1 = (((z1 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
+	// if (z0 || z1)
+	// 	img->color = 0x00FF0000;
+	// else
+	// 	img->color = 0x0000FFFF;
 	res0 = parallel(img, (t_iso_res){p0.x, p0.y, z0});
 	res1 = parallel(img, (t_iso_res){p1.x, p1.y, z1});
-	draw_points(img, res0, res1);
+	draw_points(img, res0, res1, c);
 }
 
 void	draw_a_line(t_data *img, t_point p0, t_point p1)
@@ -80,14 +83,17 @@ void	draw_a_line(t_data *img, t_point p0, t_point p1)
 	t_iso_res	res1;
 	int			z0;
 	int			z1;
+	t_color		c;
 
 	z0 = img->map[p0.y][p0.x];
 	z1 = img->map[p1.y][p1.x];
-	if (z0 || z1)
-		img->color = 0x00FF0000;
-	else
-		img->color = 0x0000FFFF;
+	c.color0 = (((z0 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
+	c.color1 = (((z1 - img->z_min) / (img->z_max - img->z_min)) * (CMAX - CMIN)) + CMIN;
+	// if (z0 || z1)
+	// 	img->color = 0x00FF0000;
+	// else
+	// 	img->color = 0x0000FFFF;
 	res0 = isometric(img, (t_iso_res){p0.x, p0.y, z0});
 	res1 = isometric(img, (t_iso_res){p1.x, p1.y, z1});
-	draw_points(img, res0, res1);
+	draw_points(img, res0, res1, c);
 }

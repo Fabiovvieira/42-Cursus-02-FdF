@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:05:24 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/19 21:57:15 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 13:04:36 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_t_iso(t_data *data)
 {
-	data->iso.scale = 10;
+	data->iso.scale = 5;
 	data->iso.transl_x = data->w_img / 2;
 	data->iso.transl_y = data->h_img / 2;
 	data->iso.rot_z = 0.;
@@ -44,6 +44,8 @@ t_data	*init_data(void)
 	init_t_iso(data);
 	data->proj = 1;
 	data->color = 0x0000FFFF;
+	data->z_max = INT_MIN;
+	data->z_min = INT_MAX;
 	return (data);
 }
 

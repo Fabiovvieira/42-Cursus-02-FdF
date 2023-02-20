@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:01:03 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/19 18:54:09 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 12:40:06 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ void	op_rotate(int key, t_data *img)
 void	op_scale(int key, t_data *img)
 {
 	if (key == ZOOMIN)
-		img->iso.scale += 2;
+		img->iso.scale += 1;
 	else
-		if (img->iso.scale > 2)
-			img->iso.scale -= 2;
+		if (img->iso.scale > 1)
+			img->iso.scale -= 1;
 }
 
 int	check_keys(int key, t_data *img)
@@ -58,8 +58,9 @@ int	check_keys(int key, t_data *img)
 	else if (key == UP || key == DOWN || key == LEFT
 		|| key == RIGHT)
 		op_translate(key, img);
-	else if (key == ZP_ROT || key == ZM_ROT || key == YP_ROT
-		|| key == YM_ROT || key == XP_ROT || key == XM_ROT)
+	else if ((key == ZP_ROT || key == ZM_ROT || key == YP_ROT
+			|| key == YM_ROT || key == XP_ROT || key == XM_ROT)
+		&& img->proj == 1)
 		op_rotate(key, img);
 	else if (key == PROJECTION)
 		img->proj *= -1;

@@ -26,6 +26,7 @@ SRCS = src/fdf.c \
 		src/parallel_eq.c \
 		src/draw_utils.c \
 		src/map.c \
+		src/color.c \
 
 OBJS = $(SRCS:%.c=%.o)
 

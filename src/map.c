@@ -6,7 +6,7 @@
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:28:06 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/18 14:30:41 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:44:00 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,22 @@ void	get_sizemap(t_data *img, char *mapfile)
 	close(fd);
 }
 
-int	**fill_map(t_data *img, int fd, int i, int j)
+void	fill_map(t_data *img, int fd, int i, int j)
 {
 	char	*str;
 	char	**strs;
-	int		**map;
 
-	map = (int **)malloc(sizeof(int *) * img->h_map);
-	if (!map)
-		return (NULL);
+	img->map = (int **)malloc(sizeof(int *) * img->h_map);
+	if (!img->map)
+		return ;
 	while (i < img->h_map)
 	{
 		str = get_next_line(fd);
 		strs = ft_split(str, ' ');
-		map[i] = (int *)malloc(sizeof(int) * img->w_map);
+		img->map[i] = (int *)malloc(sizeof(int) * img->w_map);
 		while (j < img->w_map)
 		{
-			map[i][j] = ft_atoi(strs[j]);
+			img->map[i][j] = ft_atoi(strs[j]);
 			j++;
 		}
 		j = 0;
@@ -76,7 +75,6 @@ int	**fill_map(t_data *img, int fd, int i, int j)
 	}
 	str = get_next_line(fd);
 	free(str);
-	return (map);
 }
 
 void	parse_map(t_data *img, char *mapfile)
@@ -88,7 +86,7 @@ void	parse_map(t_data *img, char *mapfile)
 	j = 0;
 	i = 0;
 	fd = openfile(mapfile);
-	img->map = fill_map(img, fd, i, j);
+	fill_map(img, fd, i, j);
 	close(fd);
 }
 
@@ -96,7 +94,7 @@ void	read_map(t_data *img, char *mapfile)
 {
 	int	fd;
 
-	fd = open (mapfile, O_RDONLY);
+	fd = open (mapfile, O_RDONLY, 0);
 	if (fd < 0)
 	{
 		perror("Error on opening mapfile.");

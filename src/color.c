@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   iso_eq_1.c                                         :+:      :+:    :+:   */
+/*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/18 14:10:23 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/20 15:48:43 by fvalli-v         ###   ########.fr       */
+/*   Created: 2023/02/20 12:52:35 by fvalli-v          #+#    #+#             */
+/*   Updated: 2023/02/20 15:48:54 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_iso_res	iso_projection(t_iso_res res)
+void	get_max_min_z(t_data *img)
 {
-	t_iso_res	iso;
+	int	i;
+	int	j;
 
-	iso.x = res.x * cos(0.8) - res.y * sin(0.8);
-	iso.y = res.y * cos(0.8) + res.x * sin(0.8);
-	iso.z = res.z;
-	return (iso);
+	j = 0;
+	while (j < img->h_map)
+	{
+		i = 0;
+		while (i < img->w_map)
+		{
+			if (img->map[j][i] < img->z_min)
+				img->z_min = img->map[j][i];
+			if (img->map[j][i] > img->z_max)
+				img->z_max = img->map[j][i];
+			i++;
+		}
+		j++;
+	}
+	// ft_printf("max = %d | min = %d\n", img->z_max, img->z_min);
 }
 
-t_iso_res	isometric(t_data *img, t_iso_res res)
-{
-	res = scale(img, res);
-	res = iso_projection(res);
-	res = rotate_z(img, res);
-	res = rotate_y(img, res);
-	res = rotate_x(img, res);
-	res = translate(img, res);
-	return (res);
-}
+// void	get_color(t_data *img, int x)
+// {
+
+// }
