@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.c                                              :+:      :+:    :+:   */
+/*   fdf_bonus.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 10:25:59 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/22 11:08:33 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/22 09:10:01 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 int	openfile(char *mapfile)
 {
@@ -23,14 +23,6 @@ int	openfile(char *mapfile)
 		exit(1);
 	}
 	return (fd);
-}
-
-void	init_centered(t_data *img)
-{
-	int	square;
-
-	square = (int)sqrt(img->w_map * img->w_map + img->h_map * img->h_map);
-	img->iso.transl_y = (img->h_img / 2) - img->iso.scale * ((square) / 2);
 }
 
 int	main(int argc, char **argv)
@@ -49,7 +41,7 @@ int	main(int argc, char **argv)
 	get_max_min_z(img);
 	img->addr = mlx_get_data_addr(img->img, &(img->bpp), &(img->line_l),
 			&(img->endian));
-	init_centered(img);
+	mlx_put_image_to_window(img->mlx, img->mlx_win, img->img, 0, 0);
 	draw_file_iso(img);
 	draw_menu(img);
 	mlx_hook(img->mlx_win, 17, 0, ft_close, img);

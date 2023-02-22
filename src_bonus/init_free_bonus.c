@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_free.c                                        :+:      :+:    :+:   */
+/*   init_free_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fvalli-v <fvalli-v@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 14:05:24 by fvalli-v          #+#    #+#             */
-/*   Updated: 2023/02/22 10:35:09 by fvalli-v         ###   ########.fr       */
+/*   Updated: 2023/02/22 09:10:07 by fvalli-v         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 void	init_t_iso(t_data *data)
 {
-	data->iso.scale = 2;
+	data->iso.scale = 5;
 	data->iso.transl_x = data->w_img / 2;
 	data->iso.transl_y = data->h_img / 2;
 	data->iso.rot_z = 0.;
